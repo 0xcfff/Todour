@@ -307,13 +307,35 @@ void MainWindow::on_lineEdit_2_returnPressed()
 }
 
 void MainWindow::on_hotkey(){
-    auto dlg = new QuickAddDialog();
-    dlg->setModal(true);
+    auto dlg = new QuickAddDialog(this);
+    // dlg->setWindowState(Qt::WindowActive);
+    // this->setWindowState(Qt::WindowActive);
+    // this->activateWindow();
+    // dlg->setModal(true);
+    // dlg->show();
+    // dlg->setFocus();
+
+    connect(dlg, SIGNAL(finished(int)), this, SLOT(on_quickadd_finished(int)));
+    connect(dlg, SIGNAL(added(QString&)), this, SLOT(on_quickadd_addedd(QString&)));
+
+
     dlg->show();
-    dlg->exec();
-    if(dlg->accepted){
-        this->addTodo(dlg->text);
-    }
+    dlg->raise();
+    dlg->activateWindow();
+
+
+    // dlg->exec();
+    // if(dlg->accepted){
+    //     this->addTodo(dlg->text);
+    // }
+}
+
+void MainWindow::on_quickadd_addedd(QString& todo){
+    this->addTodo(todo);
+}
+
+void MainWindow::on_quickadd_finished(int result){
+// TODO - delete the window
 }
 
 void MainWindow::setHotkey(){
@@ -391,19 +413,16 @@ void MainWindow::setTray(){
         if(trayicon==NULL){
             trayicon = new QSystemTrayIcon(this);
             traymenu = new QMenu(this);
-            minimizeAction = new QAction(tr("Mi&nimize"), this);
-            connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
-            maximizeAction = new QAction(tr("Ma&ximize"), this);
-            connect(maximizeAction, SIGNAL(triggered()), this, SLOT(showMaximized()));
-            restoreAction = new QAction(tr("&Restore"), this);
-            connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+            showAction = new QAction(tr("&Show"), this);
+            connect(showAction, SIGNAL(triggered()), this, SLOT(show()));
+            hideAction = new QAction(tr("&Hide"), this);
+            connect(hideAction, SIGNAL(triggered()), this, SLOT(hide()));
             quitAction = new QAction(tr("&Quit"), this);
             connect(quitAction, SIGNAL(triggered()), this, SLOT(cleanup()));
             connect(QApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(cleanup()));
 
-            traymenu->addAction(minimizeAction);
-            traymenu->addAction(maximizeAction);
-            traymenu->addAction(restoreAction);
+            traymenu->addAction(showAction);
+            traymenu->addAction(hideAction);
             traymenu->addSeparator();
             traymenu->addAction(quitAction);
             trayicon->setContextMenu(traymenu);

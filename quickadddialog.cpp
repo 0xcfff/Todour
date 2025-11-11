@@ -7,7 +7,6 @@ QuickAddDialog::QuickAddDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-    accepted=false;
 }
 
 QuickAddDialog::~QuickAddDialog()
@@ -15,8 +14,9 @@ QuickAddDialog::~QuickAddDialog()
     delete ui;
 }
 
-void QuickAddDialog::on_buttonBox_accepted()
-{
-    accepted= true;
-    text = ui->lineEdit->text();
+void QuickAddDialog::accept(){
+    auto text = ui->lineEdit->text();
+    emit added(text);
+
+    QDialog::accept();
 }

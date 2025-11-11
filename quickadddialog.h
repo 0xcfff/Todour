@@ -14,11 +14,12 @@ class QuickAddDialog : public QDialog
 public:
     explicit QuickAddDialog(QWidget *parent = 0);
     ~QuickAddDialog();
-    bool accepted;
-    QString text;
 
-private slots:
-    void on_buttonBox_accepted();
+public slots:
+    void accept() override;
+
+signals:
+    void added(QString& todo);
 
 private:
     Ui::QuickAddDialog *ui;

@@ -92,6 +92,10 @@ private slots:
 
     void on_actionManual_triggered();
 
+    void on_quickadd_addedd(QString& todo);
+
+    void on_quickadd_finished(int result);
+
 private:
     void setFileWatch();
     void requestPage(QString &s);
@@ -110,9 +114,8 @@ private:
     void setHotkey();
     QSystemTrayIcon *trayicon = NULL;
     QMenu *traymenu=NULL;
-    QAction *minimizeAction;
-    QAction *maximizeAction;
-    QAction *restoreAction;
+    QAction *showAction;
+    QAction *hideAction;
     QAction *quitAction;
 };
 
